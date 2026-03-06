@@ -4,13 +4,30 @@
 
 ![Star Office UI Cover](docs/screenshots/readme-cover-2.jpg)
 
-**A pixel office dashboard for multi-agent collaboration** — visualize your AI assistants' (OpenClaw / "lobster") work status in real time, so you can see at a glance who's doing what, what they did yesterday, and whether they're online.
+**A pixel-art AI office dashboard** — visualize your AI assistant's work status in real time, so you can see at a glance who's doing what, what they did yesterday, and whether they're online.
 
-> This is a **co-created project by Ring Hyacinth and Simon Lee**.
+Supports multi-agent collaboration, trilingual UI (CN/EN/JP), AI-powered room design, and desktop pet mode.
+Best experienced with [OpenClaw](https://openclaw.com), but also works standalone as a status dashboard.
+
+> This project was co-created by **[Ring Hyacinth](https://x.com/ring_hyacinth)** and **[Simon Lee](https://x.com/simonxxoo)**, and is continuously maintained and improved together with community contributors.
+> Issues and PRs are welcome — thank you to everyone who contributes.
 
 ---
 
-## ✨ 30-Second Quick Start
+## ✨ Quick Start
+
+### Option 1: Let your lobster deploy it (recommended for OpenClaw users)
+
+If you're using [OpenClaw](https://openclaw.com), just send this to your lobster:
+
+```text
+Please follow this SKILL.md to deploy Star Office UI for me:
+https://github.com/ringhyacinth/Star-Office-UI/blob/master/SKILL.md
+```
+
+Your lobster will automatically clone the repo, install dependencies, start the backend, configure status sync, and send you the access URL.
+
+### Option 2: 30-second manual setup
 
 ```bash
 # 1) Clone the repo
@@ -40,6 +57,19 @@ python3 set_state.py idle "Standing by"
 
 ---
 
+## 🤔 Who is this for?
+
+### Users with OpenClaw / an AI Agent
+This is the **full experience**. Your agent automatically switches status as it works, and the pixel character walks to the corresponding office area in real time — just open the page and see what your AI is doing right now.
+
+### Users without OpenClaw
+You can still deploy and use it. You can:
+- Use `set_state.py` or the API to push status manually or via scripts
+- Use it as a pixel-art personal status page or remote work dashboard
+- Connect any system that can send HTTP requests to drive the status
+
+---
+
 ## 📋 Features
 
 1. **Status Visualization** — 6 states (`idle` / `writing` / `researching` / `executing` / `syncing` / `error`) mapped to different office areas with animated sprites and speech bubbles
@@ -47,7 +77,7 @@ python3 set_state.py idle "Standing by"
 3. **Multi-Agent Collaboration** — Invite other agents to join your office via join keys and see everyone's status in real time
 4. **Trilingual UI** — Switch between Chinese, English, and Japanese with one click; all UI text, bubbles, and loading messages update instantly
 5. **Custom Art Assets** — Manage characters, scenes, and decorations through the sidebar; dynamic frame sync prevents flickering
-6. **AI-Powered Room Design** — Connect your own Gemini API to generate new office backgrounds (recommended: `nanobanana-pro` / `nanobanana-2`); core features work fine without an API
+6. **AI-Powered Room Design** — Connect your own Gemini API to generate new office backgrounds; core features work fine without an API
 7. **Mobile-Friendly** — Open on your phone for a quick status check on the go
 8. **Security Hardening** — Sidebar password protection, weak-password blocking in production, hardened session cookies
 9. **Flexible Public Access** — Use Cloudflare Tunnel for instant public access, or bring your own domain / reverse proxy
@@ -55,7 +85,7 @@ python3 set_state.py idle "Standing by"
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Detailed Setup Guide
 
 ### 1) Install dependencies
 
@@ -100,33 +130,21 @@ Share the `https://xxx.trycloudflare.com` link with anyone.
 
 ### 6) Verify your installation (optional)
 
-While the backend is running, you can run a lightweight smoke test to confirm that the core endpoints are healthy:
-
 ```bash
 python3 scripts/smoke_test.py --base-url http://127.0.0.1:19000
 ```
 
-If all checks report `OK`, your Star Office UI service is wired up correctly for basic status flows.
+If all checks report `OK`, your deployment is good to go.
 
 ---
 
-## 🦞 For OpenClaw Users
+## 🦞 OpenClaw Deep Integration
 
-> If you're using [OpenClaw](https://openclaw.com), these three steps deeply integrate your lobster with the pixel office.
+> The following section is for [OpenClaw](https://openclaw.com) users. If you don't use OpenClaw, feel free to skip this.
 
-### 4.1 Install the Skill
+### Automatic Status Sync
 
-Copy `SKILL.md` from the repo into your OpenClaw workspace:
-
-```bash
-cp SKILL.md ~/.openclaw/workspace/SKILL.md
-```
-
-Your lobster will read it automatically and follow the deployment guide — starting the backend, setting up a public link, and prompting you for passwords and API keys.
-
-### 4.2 Automatic Status Sync
-
-Add the following rule to your `SOUL.md` (or agent config) so your lobster updates its status automatically:
+Add the following rule to your `SOUL.md` (or agent config) so your agent updates its status automatically:
 
 ```markdown
 ## Star Office Status Sync Rules
@@ -145,7 +163,7 @@ Add the following rule to your `SOUL.md` (or agent config) so your lobster updat
 | `syncing` | 💻 Workspace | Syncing data / pushing |
 | `error` | 🐛 Bug Corner | Error / debugging |
 
-### 4.3 Invite Other Lobsters to Your Office
+### Invite Other Agents to Your Office
 
 **Step 1: Prepare join keys**
 
@@ -165,11 +183,11 @@ OFFICE_URL = "https://office.hyacinth.im"  # Your office URL
 python3 office-agent-push.py
 ```
 
-The script auto-joins and pushes status every 15 seconds. The guest's lobster will appear on the dashboard, moving to the appropriate area based on its state.
+The script auto-joins and pushes status every 15 seconds. The guest will appear on the dashboard, moving to the appropriate area based on their state.
 
 **Step 3 (optional): Guest installs a Skill**
 
-Guests can also use `frontend/join-office-skill.md` as a Skill — their lobster will handle setup and pushing automatically.
+Guests can also use `frontend/join-office-skill.md` as a Skill — their agent will handle setup and pushing automatically.
 
 > See [`frontend/join-office-skill.md`](./frontend/join-office-skill.md) for full guest onboarding instructions.
 
@@ -226,15 +244,6 @@ Please keep attribution when redistributing or demoing, and follow the original 
 - **Art Assets: Non-commercial use only** (learning / demo / sharing)
 
 > For commercial use, replace all art assets with your own original artwork.
-
----
-
-## 👥 Authors
-
-This project is co-created and maintained by **Ring Hyacinth** and **Simon Lee**.
-
-- **Ring Hyacinth** — [@ring_hyacinth](https://x.com/ring_hyacinth)
-- **Simon Lee** — [@simonxxoo](https://x.com/simonxxoo)
 
 ---
 

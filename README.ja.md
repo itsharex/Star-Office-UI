@@ -4,13 +4,30 @@
 
 ![Star Office UI カバー](docs/screenshots/readme-cover-2.jpg)
 
-**マルチ Agent 協調のためのピクセル・オフィス・ダッシュボード** —— AI アシスタント（OpenClaw / ロブスター）の作業状態をリアルタイムで可視化し、「誰が何をしているか」「昨日何をしたか」「今オンラインか」を直感的に把握できます。
+**ピクセルアート風 AI オフィスダッシュボード** —— AI アシスタントの作業状態をリアルタイムで可視化し、「誰が何をしているか」「昨日何をしたか」「今オンラインか」を直感的に把握できます。
 
-> 本プロジェクトは **Ring Hyacinth と Simon Lee の共同制作（co-created project）** です。
+マルチ Agent 協調、中英日 3 言語、AI 画像生成による模様替え、デスクトップペットモードに対応。
+[OpenClaw](https://openclaw.com) との統合で最高の体験が得られますが、単体でもステータスダッシュボードとして利用可能です。
+
+> 本プロジェクトは **[Ring Hyacinth](https://x.com/ring_hyacinth)** と **[Simon Lee](https://x.com/simonxxoo)** の共同制作（co-created project）であり、コミュニティの開発者とともに継続的にメンテナンス・改善を行っています。
+> Issue や PR を歓迎します。貢献してくださるすべての方に感謝いたします。
 
 ---
 
-## ✨ 30 秒クイックスタート
+## ✨ クイックスタート
+
+### 方法 1：ロブスターにデプロイしてもらう（OpenClaw ユーザー向け）
+
+[OpenClaw](https://openclaw.com) をご利用中なら、以下のメッセージをロブスターに送るだけ：
+
+```text
+この SKILL.md に従って Star Office UI をデプロイしてください：
+https://github.com/ringhyacinth/Star-Office-UI/blob/master/SKILL.md
+```
+
+ロブスターが自動的にリポジトリのクローン、依存関係のインストール、バックエンドの起動、ステータス同期の設定を行い、アクセス URL をお知らせします。
+
+### 方法 2：30 秒手動セットアップ
 
 ```bash
 # 1) リポジトリをクローン
@@ -30,8 +47,6 @@ python3 app.py
 
 **http://127.0.0.1:19000** を開き、状態を切り替えてみましょう：
 
-> ✅ ローカル開発ではデフォルト設定のままで構いませんが、本番環境では `.env.example` を `.env` にコピーし、`FLASK_SECRET_KEY` と `ASSET_DRAWER_PASS` に十分な長さのランダム値を設定することをおすすめします（弱いパスワードやセッション漏洩を防ぐため）。
-
 ```bash
 python3 set_state.py writing "ドキュメント整理中"
 python3 set_state.py error "問題を検出、調査中"
@@ -42,24 +57,27 @@ python3 set_state.py idle "待機中"
 
 ---
 
-## ✅ インストール確認（任意）
+## 🤔 誰に向いている？
 
-バックエンドが起動している状態で、簡単な smoke test を実行して主要エンドポイントが正常かどうかを確認できます：
+### OpenClaw / AI Agent をお持ちの方
+これが**フル体験**です。Agent が作業中に自動でステータスを切り替え、ピクセルキャラクターがリアルタイムで対応エリアに移動します。ページを開くだけで、AI が今何をしているかがわかります。
 
-```bash
-python3 scripts/smoke_test.py --base-url http://127.0.0.1:19000
-```
+### OpenClaw をお持ちでない方
+デプロイして使うことも全く問題ありません：
+- `set_state.py` や API で手動 / スクリプトからステータスを更新
+- ピクセルアート風の個人ステータスページやリモートワークダッシュボードとして利用
+- HTTP リクエストを送れるシステムなら何でもステータスを駆動可能
 
-すべてのチェックが `OK` と表示されれば、Star Office UI の基本的なステータスフローが正しく動作していることを意味します。
+---
 
 ## 📋 機能一覧
 
 1. **ステータス可視化** —— 6 種類の状態（`idle` / `writing` / `researching` / `executing` / `syncing` / `error`）がオフィスの各エリアに自動マッピングされ、アニメーションと吹き出しでリアルタイム表示
 2. **昨日メモ** —— `memory/*.md` から直近の作業記録を自動取得し、匿名化して「昨日メモ」カードとして表示
-3. **マルチ Agent 協調** —— join key で他のロブスターをオフィスに招待し、全員のステータスをリアルタイム確認
+3. **マルチ Agent 協調** —— join key で他の Agent をオフィスに招待し、全員のステータスをリアルタイム確認
 4. **中英日 3 言語対応** —— CN / EN / JP をワンクリック切替、UI テキスト・吹き出し・ローディング表示すべてが連動
 5. **アート資産カスタマイズ** —— サイドバーからキャラクター / 背景 / 装飾素材を管理、動的フレーム同期でちらつき防止
-6. **AI 画像生成による模様替え** —— 自前の Gemini API を接続してオフィス背景を AI 生成（推奨: `nanobanana-pro` / `nanobanana-2`）; API 未接続でもコア機能は利用可能
+6. **AI 画像生成による模様替え** —— Gemini API を接続してオフィス背景を AI 生成; API 未接続でもコア機能は利用可能
 7. **モバイル対応** —— スマホからそのまま閲覧可能、外出先からのクイックチェックに最適
 8. **セキュリティ強化** —— サイドバーのパスワード保護、本番環境での弱パスワード拒否、Session Cookie 強化
 9. **柔軟な公開アクセス** —— Cloudflare Tunnel でワンステップ公開、独自ドメイン / リバースプロキシにも対応
@@ -67,7 +85,7 @@ python3 scripts/smoke_test.py --base-url http://127.0.0.1:19000
 
 ---
 
-## 🚀 セットアップ
+## 🚀 詳細セットアップガイド
 
 ### 1) 依存関係インストール
 
@@ -91,6 +109,8 @@ python3 app.py
 
 `http://127.0.0.1:19000` を開く
 
+> ✅ ローカル開発ではデフォルト設定のままで構いませんが、本番環境では `.env.example` を `.env` にコピーし、`FLASK_SECRET_KEY` と `ASSET_DRAWER_PASS` に十分な長さのランダム値を設定してください。
+
 ### 4) ステータス切替
 
 ```bash
@@ -108,25 +128,23 @@ cloudflared tunnel --url http://127.0.0.1:19000
 
 `https://xxx.trycloudflare.com` のリンクを共有するだけで OK。
 
----
-
-## 🦞 OpenClaw ユーザー向け
-
-> [OpenClaw](https://openclaw.com) をご利用中なら、以下の 3 ステップでロブスターとピクセルオフィスを深く連携できます。
-
-### 4.1 Skill をインストール
-
-リポジトリ内の `SKILL.md` を OpenClaw のワークスペースにコピーします：
+### 6) インストール確認（任意）
 
 ```bash
-cp SKILL.md ~/.openclaw/workspace/SKILL.md
+python3 scripts/smoke_test.py --base-url http://127.0.0.1:19000
 ```
 
-ロブスターが自動的に読み込み、デプロイガイドに沿ってバックエンド起動・公開リンク設定・パスワードと API の案内まで進めてくれます。
+すべてのチェックが `OK` と表示されればデプロイ成功です。
 
-### 4.2 ステータス自動同期
+---
 
-`SOUL.md`（またはエージェント設定ファイル）に以下のルールを追加すると、ロブスターがステータスを自動で更新します：
+## 🦞 OpenClaw 連携
+
+> 以下は [OpenClaw](https://openclaw.com) ユーザー向けの内容です。OpenClaw を使用していない場合はスキップしてください。
+
+### ステータス自動同期
+
+`SOUL.md`（またはエージェント設定ファイル）に以下のルールを追加すると、Agent がステータスを自動で更新します：
 
 ```markdown
 ## Star Office ステータス同期ルール
@@ -145,7 +163,7 @@ cp SKILL.md ~/.openclaw/workspace/SKILL.md
 | `syncing` | 💻 ワークエリア | データ同期 / プッシュ |
 | `error` | 🐛 バグコーナー | エラー / デバッグ |
 
-### 4.3 他のロブスターをオフィスに招待
+### 他の Agent をオフィスに招待
 
 **Step 1：join key を準備**
 
@@ -165,11 +183,11 @@ OFFICE_URL = "https://office.hyacinth.im"  # あなたのオフィス URL
 python3 office-agent-push.py
 ```
 
-スクリプトが自動で参加し、15 秒ごとにステータスをプッシュします。ゲストのロブスターがダッシュボードに表示され、状態に応じて該当エリアに移動します。
+スクリプトが自動で参加し、15 秒ごとにステータスをプッシュします。ゲストがダッシュボードに表示され、状態に応じて該当エリアに移動します。
 
 **Step 3（任意）：ゲストも Skill をインストール**
 
-ゲストは `frontend/join-office-skill.md` を Skill として使うこともできます。ロブスターが設定とプッシュを自動で行います。
+ゲストは `frontend/join-office-skill.md` を Skill として使うこともできます。Agent が設定とプッシュを自動で行います。
 
 > 詳しいゲスト参加手順は [`frontend/join-office-skill.md`](./frontend/join-office-skill.md) を参照。
 
@@ -226,15 +244,6 @@ npm run dev
 - **アート資産：非商用のみ**（学習 / デモ / 共有用途）
 
 > 商用利用の場合は、すべてのアート資産をオリジナル素材に差し替えてください。
-
----
-
-## 👥 プロジェクト作者
-
-本プロジェクトは **Ring Hyacinth** と **Simon Lee** の共同制作・共同メンテナンスです。
-
-- **Ring Hyacinth** — [@ring_hyacinth](https://x.com/ring_hyacinth)
-- **Simon Lee** — [@simonxxoo](https://x.com/simonxxoo)
 
 ---
 
